@@ -11,8 +11,8 @@ export default class VideoController extends Controller<VideoInterface> {
 
   async save(body: SaveInterface): Promise<any> {
     return super.save({
-      find: { campaign: 'default' },
-      modify: body
-    })
+      find: { campaign: "default" },
+      modify: body,
+    });
   }
 }

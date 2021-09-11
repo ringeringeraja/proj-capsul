@@ -42,9 +42,9 @@ export default class CPlayer extends Vue implements PlayerInterface {
       this.onTimeUpdate(props);
     });
 
-    const seconds = localStorage.getItem("seconds");
-    if (seconds) {
-      vimeoPlayer.setCurrentTime(+seconds);
+    const seconds = Number(localStorage.getItem("seconds"));
+    if (seconds && seconds < (await vimeoPlayer.getDuration()) - 1) {
+      vimeoPlayer.setCurrentTime(seconds);
     }
 
     // para depuração
@@ -57,6 +57,10 @@ export default class CPlayer extends Vue implements PlayerInterface {
   }
 
   isVisible(): boolean {
+    if (!window._vp) {
+      return false;
+    }
+
     const rect = window._vp.element.getBoundingClientRect();
     return rect.top >= 0 && rect.bottom <= window.innerHeight;
   }
@@ -66,13 +70,15 @@ export default class CPlayer extends Vue implements PlayerInterface {
       login: window.login,
       videoId: window.videoId,
     });
+
+    window.scrollTo(0, document.documentElement.scrollHeight);
   }
 
   onVideoEnded(): void {
     http.post("/api/user@updateVideo", {
       login: window.login,
       videoId: window.videoId,
-      status: 'complete'
+      status: "complete",
     });
   }
 

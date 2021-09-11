@@ -12,24 +12,6 @@
   padding: 0 15vw;
 }
 
-.app__showlog {
-  --radius: 5em;
-
-  position: fixed;
-  top: 1em;
-  right: 0;
-  width: var(--radius);
-  height: var(--radius);
-  padding: 1em;
-  border-radius: 50% 0 0 50%;
-  background: var(--logger-bg-color);
-
-  text-align: center;
-  line-height: var(--radius);
-  box-shadow: var(--logger-shadow);
-  cursor: pointer;
-}
-
 .app__disclaimer {
   font-size: 1.7em;
   line-height: 1.6em;
@@ -37,6 +19,7 @@
   padding: 0 2em;
   text-align: justify;
 
+  box-sizing: border-box;
   transition: all .3s;
 }
 
@@ -59,7 +42,9 @@
   top: 0;
   right: 0;
   height: 100vh;
-  width: 60vh;
+  width: 30vw;
+
+  box-sizing: border-box;
 }
 
 .logger-enter-active,
@@ -76,7 +61,31 @@
 @media screen and (max-width: 600px) {
   .app {
     max-width: 100%;
-    grid-gap: 0.5em;
-    grid-template-columns: 1fr;
+    grid-gap: 0;
+    grid-template-columns: 1fr !important;
+  }
+
+  .app__full > .app__disclaimer {
+    padding: initial;
+  }
+
+  .app__disclaimer {
+    max-width: 100vw;
+    padding: 0 20px !important;
+    border: 1px solid blue;
+
+    font-size: 1.2em;
+  }
+
+  .app__disclaimer__video {
+    margin: 1em 0;
+  }
+
+  .app__disclaimer__p--last {
+    margin: 0 0 5vh 0;
+  }
+
+  .app__logger {
+    width: 100vw;
   }
 }

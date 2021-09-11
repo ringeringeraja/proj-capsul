@@ -1,12 +1,13 @@
-import { mongoose, options } from "../../database";
+import { Document, Schema, Model, model } from "mongoose";
+import { options } from "../../database";
 
-interface VideoInterface extends mongoose.Document {
+export interface VideoInterface extends Document {
   id: string;
   duration: number;
   isRequired: boolean;
 }
 
-const VideoSchema: mongoose.Schema = new mongoose.Schema(
+export const VideoSchema: Schema = new Schema(
   {
     id: {
       type: String,
@@ -28,9 +29,4 @@ const VideoSchema: mongoose.Schema = new mongoose.Schema(
   options
 );
 
-const Video: mongoose.Model<VideoInterface> = mongoose.model(
-  "Video",
-  VideoSchema
-);
-
-export { VideoInterface, VideoSchema, Video };
+export const Video: Model<VideoInterface> = model("Video", VideoSchema);

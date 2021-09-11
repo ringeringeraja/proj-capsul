@@ -1,4 +1,5 @@
-import { mongoose, options } from "../../database";
+import { Document, Schema, SchemaTypes, Model, model } from "mongoose";
+import { options } from "../../database";
 
 export interface UserInterface extends Document {
   login: string;
@@ -12,36 +13,41 @@ export interface UserInterface extends Document {
   ];
 }
 
-export const ViewedVideoSchema: mongoose.Schema = mongoose.Schema({
-  video: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: 'Video',
-    required: true,
+export const ViewedVideoSchema: Schema = new Schema(
+  {
+    video: {
+      type: SchemaTypes.ObjectId,
+      ref: "Video",
+      required: true,
+    },
+    status: {
+      type: String,
+      default: "started",
+      validator: (s) => ["started", "complete"].includes(s),
+    },
+    mark: {
+      type: Number,
+      default: 0,
+    },
   },
-  status: {
-    type: String,
-    required: true,
-  },
-  mark: {
-    type: Number,
-    required: true,
+  {
+    _id: false,
   }
-}, {
-  _id: false
-})
+);
 
-export const UserSchema: mongoose.Schema = new mongoose.Schema(
+export const UserSchema: Schema = new Schema(
   {
     login: {
       type: String,
       required: true,
     },
-    viewedVideos: [ ViewedVideoSchema ],
+    viewed: {
+      type: Number,
+      default: 0,
+    },
+    viewedVideos: [ViewedVideoSchema],
   },
   options
 );
 
-export const User: mongoose.Model<UserInterface> = mongoose.model(
-  "User",
-  UserSchema
-);
+export const User: Model<UserInterface> = model("User", UserSchema);

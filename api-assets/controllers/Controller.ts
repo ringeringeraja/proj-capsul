@@ -1,7 +1,8 @@
+import { Model } from "mongoose";
 import { mongoose } from "../database";
 
 export interface OptionsInterface<T> {
-  model: mongoose.Model<T>;
+  model: Model<T>;
   description?: string;
 }
 
@@ -22,6 +23,7 @@ export interface GetAllInterface {
 export interface SaveInterface {
   find: any;
   modify: any;
+  options?: any;
 }
 
 export interface ControllerInterface {
@@ -29,11 +31,11 @@ export interface ControllerInterface {
   count(body: CountInterface): any;
   get(body: GetInterface): any;
   getAll(body: GetAllInterface): any;
-  save(body: SaveInterface);
+  save(body: SaveInterface, options: any): any;
 }
 
 export abstract class Controller<T> implements ControllerInterface {
-  model: mongoose.Model<T>;
+  model: Model<T>;
   description: string;
 
   constructor(options: OptionsInterface<T>) {
@@ -56,10 +58,16 @@ export abstract class Controller<T> implements ControllerInterface {
     return this.model.find(body as any);
   }
 
-  save(body: SaveInterface): any {
-    return this.model.findOneAndUpdate(body.find, body.modify, {
-      upsert: true,
-      new: true,
-    });
+  save(body: SaveInterface, options?: any): any {
+    return this.model.findOneAndUpdate(
+      body.find,
+      body.modify,
+      options
+        ? options
+        : {
+            upsert: true,
+            new: true,
+          }
+    );
   }
 }

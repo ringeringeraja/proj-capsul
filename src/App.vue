@@ -70,13 +70,7 @@
     </transition>
 
     <transition name="logger">
-      <div
-        class="app__showlog"
-        v-if="!!isFullscreen"
-        @click="isFullscreen = false"
-      >
-        Mostrar log
-      </div>
+      <c-slip v-if="!!isFullscreen" @click="isFullscreen = false" />
     </transition>
   </div>
 </template>
@@ -84,9 +78,12 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { DefineComponent } from "vue";
+import { WindowInterface } from "./window";
+import http from "@/http";
+
 import CPlayer from "./components/Player.vue";
 import CLogger from "./components/Logger.vue";
-import { WindowInterface } from "./window";
+import CSlip from "./components/Slip.vue";
 
 declare const window: Window & WindowInterface;
 
@@ -94,13 +91,14 @@ declare const window: Window & WindowInterface;
   components: {
     CPlayer,
     CLogger,
+    CSlip,
   },
 
   computed: {
     videoId() {
       return window.videoId;
-    }
-  }
+    },
+  },
 })
 export default class App extends Vue {
   videoPlayer: DefineComponent;
@@ -109,20 +107,8 @@ export default class App extends Vue {
   isFullscreen = false;
 
   async mounted(): Promise<void> {
-    let seconds = Number(localStorage.getItem("seconds"));
-
     this.videoPlayer = this.$refs.videoPlayer as DefineComponent;
     this.logger = this.$refs.logger as DefineComponent;
-
-    if (seconds) {
-      // se estiver proximo ao final do video, dá uma voltada
-      if (seconds > 0 && seconds >= (await window._vp.getDuration()) - 15) {
-        seconds = seconds - 15;
-      }
-
-      window._vp.setCurrentTime(seconds);
-      this.logger.hasVideoStartedAlready = true;
-    }
 
     window.addEventListener("scroll", () => {
       this.logger.isVideoVisible = this.videoPlayer.isVisible();
@@ -131,6 +117,12 @@ export default class App extends Vue {
     window.addEventListener("beforeunload", async () => {
       const seconds = await window._vp.getCurrentTime();
       localStorage.setItem("seconds", seconds);
+
+      await http.post("/api/user@updateVideo", {
+        login: window.login,
+        videoId: window.videoId,
+        mark: seconds,
+      });
 
       return "";
     });
@@ -141,6 +133,7 @@ export default class App extends Vue {
 
   onVideoPlayed(): void {
     this.logger.isVideoPlaying = true;
+    window.scrollY;
   }
 
   onVideoEnded(): void {
@@ -151,8 +144,8 @@ export default class App extends Vue {
     this.logger.updateTime(props);
   }
 
-  advanceVideo(): void {
-    window._vp.setCurrentTime(685);
+  async advanceVideo(): Promise<void> {
+    window._vp.setCurrentTime((await window._vp.getDuration()) - 5);
   }
 }
 </script>
@@ -169,9 +162,13 @@ html {
   overflow-x: hidden;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   --logger-bg-color: #efefef;
-  --logger-shadow: 0 5px 20px #666;
+  --logger-shadow: 2px 2px 12px #666;
 }
 </style>
 

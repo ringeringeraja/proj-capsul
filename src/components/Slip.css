@@ -1,0 +1,21 @@
+.slip {
+  --radius: 5em;
+
+  position: fixed;
+  top: 1em;
+  right: 0;
+  height: var(--radius);
+  padding: 1em;
+  border-radius: 50% 0 0 50%;
+  background: var(--logger-bg-color);
+
+  text-align: center;
+  line-height: var(--radius);
+  box-shadow: var(--logger-shadow);
+  cursor: pointer;
+
+  font-family: Roboto;
+  white-space: normal;
+  word-wrap: nowrap;
+}
+
