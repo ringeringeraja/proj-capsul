@@ -1,0 +1,82 @@
+.app {
+  display: grid;
+  grid-gap: 1vw;
+  grid-template-columns: 1.3fr 0.7fr;
+}
+
+.app--full {
+  grid-template-columns: 1fr;
+}
+
+.app--full > .app__disclaimer {
+  padding: 0 15vw;
+}
+
+.app__showlog {
+  --radius: 5em;
+
+  position: fixed;
+  top: 1em;
+  right: 0;
+  width: var(--radius);
+  height: var(--radius);
+  padding: 1em;
+  border-radius: 50% 0 0 50%;
+  background: var(--logger-bg-color);
+
+  text-align: center;
+  line-height: var(--radius);
+  box-shadow: var(--logger-shadow);
+  cursor: pointer;
+}
+
+.app__disclaimer {
+  font-size: 1.7em;
+  line-height: 1.6em;
+  width: auto;
+  padding: 0 2em;
+  text-align: justify;
+
+  transition: all .3s;
+}
+
+.app__disclaimer__p--last {
+  font-weight: bold;
+  font-size: 1.5em;
+  text-align: center;
+  line-height: 1.35em;
+
+  margin: 1em 0 1.5em 0;
+}
+
+.app__disclaimer__video {
+  text-align: center;
+  margin: 12vh 0 5vh 0;
+}
+
+.app__logger {
+  position: fixed !important;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 60vh;
+}
+
+.logger-enter-active,
+.logger-leave-active {
+  transition: all .75s;
+}
+
+.logger-enter-from,
+.logger-leave-to {
+  opacity: 0;
+  transform: translateX(5em);
+}
+
+@media screen and (max-width: 600px) {
+  .app {
+    max-width: 100%;
+    grid-gap: 0.5em;
+    grid-template-columns: 1fr;
+  }
+}
