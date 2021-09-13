@@ -1,5 +1,6 @@
 <template>
   <div :class="{ app: true, 'app--full': !!isFullscreen }">
+    <div class="app__progress" :style="`--width: ${progress()}vw`"></div>
     <div class="app__disclaimer">
       <p class="app__disclaimer__p">
         Quisque quam posuere libero, ut faucibus ac, pretium augue potenti
@@ -103,6 +104,7 @@ declare const window: Window & WindowInterface;
 export default class App extends Vue {
   videoPlayer: DefineComponent;
   logger: DefineComponent;
+  steps = Array(4);
 
   isFullscreen = false;
 
@@ -110,8 +112,10 @@ export default class App extends Vue {
     this.videoPlayer = this.$refs.videoPlayer as DefineComponent;
     this.logger = this.$refs.logger as DefineComponent;
 
+    this.steps.fill(false);
+
     window.addEventListener("scroll", () => {
-      this.logger.isVideoVisible = this.videoPlayer.isVisible();
+      this.onVideoVisible();
     });
 
     window.addEventListener("beforeunload", async () => {
@@ -131,17 +135,32 @@ export default class App extends Vue {
     return Promise.resolve();
   }
 
+  onVideoVisible(): void {
+    this.logger.isVideoVisible = this.videoPlayer.isVisible();
+    if (this.logger.isVideoVisible) {
+      this.steps[0] = true;
+    }
+  }
+
   onVideoPlayed(): void {
     this.logger.isVideoPlaying = true;
     window.scrollY;
+
+    this.steps[1] = true;
   }
 
   onVideoEnded(): void {
     this.logger.hasVideoEnded = true;
+    this.steps[2] = true;
+    this.steps[3] = true;
   }
 
   onTimeUpdate(props: any): void {
     this.logger.updateTime(props);
+  }
+
+  progress(): number {
+    return 25 * this.steps.filter((s) => !!s).length;
   }
 
   async advanceVideo(): Promise<void> {

@@ -12,6 +12,24 @@
   padding: 0 15vw;
 }
 
+.app__progress {
+  position: fixed;
+  display: inline-block;
+  top: 0;
+  left: 0;
+  background: linear-gradient(90deg, #64da98, #9198e5);
+
+  width: var(--width);
+  height: 5px;
+
+  transition: width 1s;
+  z-index: 999999;
+}
+
+.app__progress::before {
+  content: '';
+}
+
 .app__disclaimer {
   font-size: 1.7em;
   line-height: 1.6em;

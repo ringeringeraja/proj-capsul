@@ -46,7 +46,7 @@
             status: {{ user.viewedVideos[0]?.status || "undef" }}
           </div>
           <div class="user__mark">
-            mark: {{ user.viewedVideos[0]?.mark || "undef" }}
+            mark: {{ user.viewedVideos[0]?.mark || "0" }}
           </div>
         </div>
       </div>

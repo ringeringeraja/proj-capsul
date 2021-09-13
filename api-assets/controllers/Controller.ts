@@ -55,7 +55,8 @@ export abstract class Controller<T> implements ControllerInterface {
   }
 
   getAll(body: GetAllInterface): any {
-    return this.model.find(body as any);
+    return this.model.find(body as any)
+      .sort({ _id: -1 });
   }
 
   save(body: SaveInterface, options?: any): any {

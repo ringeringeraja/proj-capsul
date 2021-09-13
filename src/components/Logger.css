@@ -5,6 +5,8 @@
   font-family: Roboto;
   font-weight: 300;
   box-shadow: var(--logger-shadow);
+
+  overflow-y: scroll;
 }
 
 .logger__user {
@@ -35,7 +37,8 @@
   min-height: 20em;
 }
 
-.logger__api__header {
+.logger__api__header,
+.logger__api__user {
   margin-bottom: 1em;
 }
 
